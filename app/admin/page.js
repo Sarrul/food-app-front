@@ -10,7 +10,7 @@ const AdminPage = () => {
   return (
     <div className="bg-[#F4F4F5] flex flex-row gap-6 justify-center">
       {/* side bar */}
-      <div className="w-[205px] h-[1024px] bg-white"></div>
+      <div className="w-[205px] h-[1024px] bg-white sticky top-0"></div>
       {/* main */}
       <div className="flex flex-col gap-6">
         {/* deed taliin menu */}

@@ -8,6 +8,7 @@ import AddCategoryDialog from "./AddCategoryDialog";
 
 const CategoriesList = () => {
   const [categories, setCategories] = useState([]);
+  const [foods, setFoods] = useState([]);
 
   const getCategory = async () => {
     try {
@@ -35,8 +36,24 @@ const CategoriesList = () => {
     }
   };
 
+  const getFood = async () => {
+    try {
+      const res = await axios.get("http://localhost:999/food");
+      console.log("response", res);
+      setFoods(res.data);
+    } catch (err) {
+      console.log("Error fetching food:", err);
+    }
+  };
+
+  const getFoodByCategory = async (categoryId) => {
+    const res = await axios.get(`http://localhost:999/food/${categoryId}`);
+    return res.data;
+  };
+
   useEffect(() => {
     getCategory();
+    getFood();
   }, []);
 
   return (
@@ -45,16 +62,35 @@ const CategoriesList = () => {
         <div className=" w-full flex  justify-end">
           <Image src="/Avatar.png" width={36} height={36} alt="Avatar" />
         </div>
-        <div className="bg-white rounded-xl p-6 h-44 w-[1171px] gap-4">
-          <p className="text-(--text-text-foreground) font-inter text-[20px] font-semibold leading-7 tracking-[-0.5px]">
+        <div className="bg-white rounded-xl p-6 h-44 w-[1171px] gap-4 flex flex-col">
+          <div className="text-(--text-text-foreground) font-inter text-[20px] font-semibold leading-7 tracking-[-0.5px]">
             Dishes Category
-          </p>
-          <div>
-            {categories.map((item) => (
-              <Badge key={item._id} className="px-4 py-2 m-1" variant="outline">
-                {item.categoryName}
+          </div>
+          <div className="flex flex-wrap gap-3 items-center">
+            {console.log("Test", categories, foods)}
+            <Badge className="px-4 py-2" variant="outline">
+              All dishes
+              <Badge variant="default" className="px-2.5 py-0.5">
+                {foods.length}
               </Badge>
-            ))}
+            </Badge>
+            {categories.map((item) => {
+              const foodCount = foods.filter(
+                (food) => food.category === item._id
+              ).length;
+              return (
+                <Badge
+                  key={item._id}
+                  className="px-4 py-2  gap-2"
+                  variant="outline"
+                >
+                  {item.categoryName}
+                  <Badge variant="default" className="px-2.5 py-0.5">
+                    {foodCount}
+                  </Badge>
+                </Badge>
+              );
+            })}
             <AddCategoryDialog onAdd={handleAddCategory} />
           </div>
         </div>

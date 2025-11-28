@@ -15,14 +15,21 @@ import { Button } from "@/components/ui/button";
 
 const AddCategoryDialog = ({ onAdd }) => {
   const [newCategory, setNewCategory] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleAdd = () => {
     if (!newCategory) return;
-    onAdd(newCategory); // send value to parent
-    setNewCategory(""); // clear input
+    onAdd(newCategory);
+    setNewCategory("");
+    setOpen(false);
+  };
+
+  const handleClose = (state) => {
+    setOpen(state);
+    if (!state) setNewCategory("");
   };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogTrigger className="bg-[#EF4444] w-9 h-9 rounded-full flex justify-center items-center">
         <Plus strokeWidth={1} className="text-white" />
       </DialogTrigger>
