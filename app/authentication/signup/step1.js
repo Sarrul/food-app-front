@@ -6,7 +6,7 @@ import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft } from "lucide-react";
 
-export default function Step1({ next, formik }) {
+export default function Step1({ next, formik, apiError }) {
   const { values, handleChange, handleBlur, errors, touched } = formik;
 
   return (
@@ -41,7 +41,6 @@ export default function Step1({ next, formik }) {
               {/* input */}
               <Field>
                 <Input
-                  type="email"
                   name="email"
                   value={values.email}
                   onChange={handleChange}
@@ -54,6 +53,9 @@ export default function Step1({ next, formik }) {
                 />
                 {errors.email && touched.email && (
                   <p className="text-red-700 text-sm">{errors.email}</p>
+                )}
+                {apiError && (
+                  <div className="text-red-700 text-sm">{apiError}</div>
                 )}
               </Field>
 

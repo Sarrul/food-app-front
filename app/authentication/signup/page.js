@@ -4,9 +4,13 @@ import { useFormik } from "formik";
 import Step1 from "./step1";
 import Step2 from "./step2";
 import * as Yup from "yup";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
   const [step, setStep] = useState(1);
+  const [apiError, setApiError] = useState("");
+  const router = useRouter();
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -23,6 +27,39 @@ const Home = () => {
       .required("Please confirm your password"),
   });
 
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:999/authentication/check-email",
+        { email }
+      );
+      setApiError("");
+      return true;
+    } catch (err) {
+      setApiError(err.response.data);
+      return false;
+    } finally {
+      console.log("finished checking email");
+    }
+  };
+
+  const createUser = async (email, password) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:999/authentication/signup",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      router.push("/authentication/login");
+    } catch (err) {
+      setApiError(err.response.data);
+    } finally {
+      console.log("finished creating user");
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -30,17 +67,25 @@ const Home = () => {
       confirmPassword: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      const { email, password } = values;
+      await createUser(email, password);
     },
   });
 
-  const next = () => setStep((s) => s + 1);
+  const next = async () => {
+    formik.setTouched({ email: true });
+    const errors = await formik.validateForm();
+    if (!errors.email) {
+      const available = await checkEmailExists(formik.values.email);
+      if (available) setStep((s) => s + 1);
+    }
+  };
   const back = () => setStep((s) => s - 1);
 
   return (
     <div>
-      {step === 1 && <Step1 next={next} formik={formik} />}
+      {step === 1 && <Step1 next={next} formik={formik} apiError={apiError} />}
       {step === 2 && <Step2 next={next} back={back} formik={formik} />}
     </div>
   );

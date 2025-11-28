@@ -8,22 +8,30 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Step2({ next, back, formik }) {
-  const { values, handleChange, handleBlur, errors, touched } = formik;
+  const {
+    values,
+    handleChange,
+    handleBlur,
+    errors,
+    touched,
+    handleSubmit,
+    isSubmitting,
+  } = formik;
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLetsGo = async (e) => {
-    e.preventDefault();
-    formik.setTouched({
-      password: true,
-      confirmPassword: true,
-    });
-    const errors = await formik.validateForm();
+  //   const handleLetsGo = async (e) => {
+  //     e.preventDefault();
+  //     formik.setTouched({
+  //       password: true,
+  //       confirmPassword: true,
+  //     });
+  //     const errors = await formik.validateForm();
 
-    if (Object.keys(errors).length === 0) {
-      router.push("/authentication/login");
-    }
-  };
+  //     if (Object.keys(errors).length === 0) {
+  //       router.push("/authentication/login");
+  //     }
+  //   };
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0 border-none shadow-none rounded-none">
@@ -108,7 +116,9 @@ export default function Step2({ next, back, formik }) {
 
               {/* create button */}
               <Field>
-                <Button onClick={handleLetsGo}>Let's go</Button>
+                <Button onClick={handleSubmit} disable={isSubmitting}>
+                  Let's go
+                </Button>
               </Field>
 
               <FieldDescription className="text-center">
