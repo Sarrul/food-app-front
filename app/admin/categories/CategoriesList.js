@@ -23,9 +23,17 @@ const CategoriesList = () => {
   const handleAddCategory = async (categoryName) => {
     // setLoading(true);
     try {
-      const res = await axios.post("http://localhost:999/foodcategory", {
-        categoryName,
-      });
+      const res = await axios.post(
+        "http://localhost:999/foodcategory",
+        {
+          categoryName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log(res, "response");
       setCategories((prev) => [...prev, res.data]);

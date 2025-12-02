@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Login({ className }) {
   const router = useRouter();
@@ -26,7 +27,11 @@ export default function Login({ className }) {
         "http://localhost:999/authentication/login",
         values
       );
-      router.push("/");
+      // router.push("/");
+      localStorage.setItem("Token", response.data.token);
+
+      console.log("Push to home page success", response);
+      toast.success("login succesful");
       console.log("LOGIN FORM DATA:", values);
     } catch (err) {
       console.log(err);
@@ -49,6 +54,7 @@ export default function Login({ className }) {
 
   return (
     <div className={cn("flex flex-col gap-6", className)}>
+      <ToastContainer />
       <Card className="overflow-hidden p-0 border-none shadow-none rounded-none">
         <CardContent className="grid p-0">
           <form className="p-6 md:p-8" onSubmit={formik.handleSubmit}>
