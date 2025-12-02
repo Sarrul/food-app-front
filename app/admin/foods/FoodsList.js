@@ -13,7 +13,7 @@ const CLOUD_NAME = "dzkjbbs03";
 const FoodsList = () => {
   const [categories, setCategories] = useState([]);
   const [foods, setFoods] = useState([]);
-  const [logoUrl, setLogoUrl] = useState("");
+  const [preview, setPreview] = useState("");
   const [newFood, setNewFood] = useState({
     foodName: "",
     price: "",
@@ -96,7 +96,7 @@ const FoodsList = () => {
       if (!file) return;
       try {
         const url = await uploadToCloudinary(file);
-        setLogoUrl(url);
+        setPreview(url);
       } catch (err) {
         console.error("failed to upload image", err.message);
       }
@@ -135,6 +135,12 @@ const FoodsList = () => {
                     <FoodInfoDialog
                       key={food._id}
                       food={food}
+                      categories={categories}
+                      onDelete={(deletedId) =>
+                        setFoods((prevFoods) =>
+                          prevFoods.filter((f) => f._id !== deletedId)
+                        )
+                      }
                       trigger={
                         <div className="flex p-4 flex-col items-start gap-5 self-stretch  border border-[#E4E4E7] w-[270px] h-[241px] rounded-[20px]">
                           <div className="w-[239px] h-[129px] rounded-xl overflow-hidden bg-amber-100">
@@ -146,9 +152,9 @@ const FoodsList = () => {
                               className="object-cover w-full h-full"
                             />
                           </div>
-                          <div className="flex flex-col gap-2">
-                            <div className="flex flex-row gap-2.5 ">
-                              <p className="text-[#EF4444] text-sm font-medium leading-5 font-inter w-[190px]">
+                          <div className="flex flex-col gap-2 justify-start items-start ">
+                            <div className="flex flex-row gap-2.5 w-60 ">
+                              <p className="text-[#EF4444] text-sm font-medium leading-5 font-inter w-[190px] flex justify-start">
                                 {food.foodName}
                               </p>
                               <p className="text-[#09090B] text-xs font-normal leading-4 font-inter">
@@ -156,7 +162,7 @@ const FoodsList = () => {
                               </p>
                             </div>
 
-                            <p className="text-[#09090B] text-xs font-normal leading-4 font-inter">
+                            <p className="text-[#09090B] text-xs font-normal leading-4 font-inter flex justify-start text-start">
                               {food.ingredients}
                             </p>
                           </div>
