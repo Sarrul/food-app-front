@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Plus, X, Image } from "lucide-react";
+import { useState } from "react";
+import { Plus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,8 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ImageUploader from "../../_components/ImageUploader";
-const UPLOAD_PRESET = "food-app";
-const CLOUD_NAME = "dzkjbbs03";
+import { useFoodCategory } from "../../_provider/FoodCategoryProvider";
 
 const AddFoodDialog = ({
   category,
@@ -30,11 +29,22 @@ const AddFoodDialog = ({
     category: "",
   };
   const [close, setClose] = useState(false);
+  const { addFood } = useFoodCategory();
 
   const handleClose = (state) => {
     setClose(state);
     if (!state) {
       setNewFood(initialState);
+    }
+  };
+
+  const handleSubmitButton = async () => {
+    console.log("hello");
+    try {
+      await addFood(newFood);
+      handleClose(false);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -105,10 +115,7 @@ const AddFoodDialog = ({
           <Button
             variant="default"
             className="w-[93px] h-10"
-            onClick={() => {
-              onAdd();
-              handleClose(false);
-            }}
+            onClick={handleSubmitButton}
             // disabled={loading}
           >
             Add a dish

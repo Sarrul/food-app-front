@@ -2,67 +2,11 @@
 
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import AddCategoryDialog from "./AddCategoryDialog";
+import { useFoodCategory } from "../../_provider/FoodCategoryProvider";
 
 const CategoriesList = () => {
-  const [categories, setCategories] = useState([]);
-  const [foods, setFoods] = useState([]);
-
-  const getCategory = async () => {
-    try {
-      const res = await axios.get("http://localhost:999/foodcategory");
-      // console.log("response", res);
-      setCategories(res.data);
-    } catch (err) {
-      console.log("Error fetching categories:", err);
-    }
-  };
-
-  const handleAddCategory = async (categoryName) => {
-    // setLoading(true);
-    try {
-      const res = await axios.post(
-        "http://localhost:999/foodcategory",
-        {
-          categoryName,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log(res, "response");
-      setCategories((prev) => [...prev, res.data]);
-    } catch (err) {
-      console.log("Error creating categories:", err);
-      // } finally {
-      //   setLoading(false);
-    }
-  };
-
-  const getFood = async () => {
-    try {
-      const res = await axios.get("http://localhost:999/food");
-      console.log("response", res);
-      setFoods(res.data);
-    } catch (err) {
-      console.log("Error fetching food:", err);
-    }
-  };
-
-  const getFoodByCategory = async (categoryId) => {
-    const res = await axios.get(`http://localhost:999/food/${categoryId}`);
-    return res.data;
-  };
-
-  useEffect(() => {
-    getCategory();
-    getFood();
-  }, []);
+  const { categories, foods, addCategory } = useFoodCategory();
 
   return (
     <div>
@@ -99,7 +43,7 @@ const CategoriesList = () => {
                 </Badge>
               );
             })}
-            <AddCategoryDialog onAdd={handleAddCategory} />
+            <AddCategoryDialog onAdd={addCategory} />
           </div>
         </div>
       </div>

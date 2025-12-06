@@ -14,13 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
-import axios from "axios";
 import { Input } from "@/components/ui/input";
 import ImageUploader from "../../_components/ImageUploader";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
+import { useFoodCategory } from "../../_provider/FoodCategoryProvider";
 
-const FoodInfoDialog = ({ trigger, food, categories, onDelete }) => {
+const FoodInfoDialog = ({ trigger, food, categories }) => {
   const category = categories.find((c) => c._id === food.category);
   const [open, setOpen] = useState(false);
   const [editableFood, setEditableFood] = useState({
@@ -31,32 +31,16 @@ const FoodInfoDialog = ({ trigger, food, categories, onDelete }) => {
     image: food.image,
   });
 
-  const updateFood = async () => {
-    try {
-      const res = await axios.put(
-        `http://localhost:999/food/${food._id}`,
-        editableFood
-      );
-      console.log("Updated food:", res.data);
+  const { updateFood, deleteFood } = useFoodCategory();
 
-      setOpen(false);
-    } catch (err) {
-      console.error("Error updating food:", err);
-    }
+  const handleUpdate = async () => {
+    await updateFood(food._id, editableFood);
+    setOpen(false);
   };
 
-  const deleteFood = async () => {
-    try {
-      await axios.delete(`http://localhost:999/food/${food._id}`);
-      console.log("Deleted food:", food._id);
-
-      // Call parent callback to remove food from list if provided
-      if (onDelete) onDelete(food._id);
-
-      setOpen(false);
-    } catch (err) {
-      console.error("Error deleting food:", err);
-    }
+  const handleDelete = async () => {
+    await deleteFood(food._id);
+    setOpen(false);
   };
 
   return (
@@ -141,14 +125,14 @@ const FoodInfoDialog = ({ trigger, food, categories, onDelete }) => {
           <Button
             className="w-12 h-10 border-[#EF4444]"
             variant="outline"
-            onClick={deleteFood}
+            onClick={handleDelete}
           >
             <Trash className="text-[#EF4444]" />
           </Button>
           <Button
             variant="default"
             className="w-[126px] h-10 "
-            onClick={updateFood}
+            onClick={handleUpdate}
           >
             Save changes
           </Button>

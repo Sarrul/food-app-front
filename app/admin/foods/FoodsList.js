@@ -6,14 +6,9 @@ import { useEffect, useState } from "react";
 
 import AddFoodDialog from "./AddFoodDialog";
 import FoodInfoDialog from "./FoodInfoDialog";
-
-const UPLOAD_PRESET = "food-app";
-const CLOUD_NAME = "dzkjbbs03";
+import { useFoodCategory } from "../../_provider/FoodCategoryProvider";
 
 const FoodsList = () => {
-  const [categories, setCategories] = useState([]);
-  const [foods, setFoods] = useState([]);
-  const [preview, setPreview] = useState("");
   const [newFood, setNewFood] = useState({
     foodName: "",
     price: "",
@@ -21,99 +16,11 @@ const FoodsList = () => {
     ingredients: "",
     category: "",
   });
-
-  const getCategory = async () => {
-    try {
-      const res = await axios.get("http://localhost:999/foodcategory");
-      console.log("response", res);
-      setCategories(res.data);
-    } catch (err) {
-      console.log("Error fetching food:", err);
-    }
-  };
-
-  const getFood = async () => {
-    try {
-      const res = await axios.get("http://localhost:999/food");
-      console.log("response", res);
-      setFoods(res.data);
-    } catch (err) {
-      console.log("Error fetching food:", err);
-    }
-  };
-
-  const addFood = async () => {
-    if (!newFood) return;
-    console.log(newFood, "newFood");
-
-    // setLoading(true);
-    try {
-      const res = await axios.post("http://localhost:999/food", newFood);
-      console.log(res, "response");
-      setFoods((prev) => [...prev, res.data]);
-      setNewFood({
-        foodName: "",
-        price: "",
-        image: "",
-        ingredients: "",
-        category: "",
-      });
-    } catch (err) {
-      console.log("Error creating food:", err);
-      // } finally {
-      // setLoading(false);
-    }
-  };
-
-  const getFoodByCategory = async (categoryId) => {
-    const res = await axios.get(`http://localhost:999/food/${categoryId}`);
-    return res.data;
-  };
-
-  const uploadToCloudinary = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", UPLOAD_PRESET);
-
-    try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const data = await response.json();
-      return data.secure_url;
-    } catch (err) {
-      console.error("cloudinary failed", err);
-    }
-  };
-
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    {
-      if (!file) return;
-      try {
-        const url = await uploadToCloudinary(file);
-        setPreview(url);
-      } catch (err) {
-        console.error("failed to upload image", err.message);
-      }
-    }
-  };
-
-  useEffect(() => {
-    getFood();
-    getCategory();
-  }, []);
+  const { categories, foods } = useFoodCategory();
 
   return (
     <div>
       {categories.map((item) => {
-        {
-          console.log("FOOD:", foods, "CATEGORY:", item._id);
-        }
         return (
           <div
             key={item._id}
@@ -125,7 +32,6 @@ const FoodsList = () => {
                 <AddFoodDialog
                   category={item._id}
                   categoryName={item.categoryName}
-                  onAdd={addFood}
                   newFood={newFood}
                   setNewFood={setNewFood}
                 />
