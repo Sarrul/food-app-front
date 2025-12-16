@@ -30,7 +30,7 @@ const Home = () => {
   const checkEmailExists = async (email) => {
     try {
       const response = await axios.post(
-        "http://localhost:999/authentication/check-email",
+        "http://localhost:5000/authentication/check-email",
         { email }
       );
       setApiError("");
@@ -46,7 +46,7 @@ const Home = () => {
   const createUser = async (email, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:999/authentication/signup",
+        "http://localhost:5000/authentication/signup",
         {
           email: email,
           password: password,

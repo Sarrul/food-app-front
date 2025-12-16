@@ -25,7 +25,7 @@ export const FoodCategoryProvider = ({ children }) => {
   // category
   const getCategory = async () => {
     try {
-      const res = await axios.get("http://localhost:999/foodcategory");
+      const res = await axios.get("http://localhost:5000/foodcategory");
 
       setCategories(res.data);
     } catch (err) {
@@ -39,7 +39,7 @@ export const FoodCategoryProvider = ({ children }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:999/foodcategory",
+        "http://localhost:5000/foodcategory",
         {
           categoryName,
         },
@@ -62,7 +62,7 @@ export const FoodCategoryProvider = ({ children }) => {
   // food
   const getFood = async () => {
     try {
-      const res = await axios.get("http://localhost:999/food");
+      const res = await axios.get("http://localhost:5000/food");
       console.log("response", res);
       setFoods(res.data);
     } catch (err) {
@@ -77,7 +77,7 @@ export const FoodCategoryProvider = ({ children }) => {
 
     // setLoading(true);
     try {
-      const res = await axios.post("http://localhost:999/food", food, {
+      const res = await axios.post("http://localhost:5000/food", food, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -95,7 +95,7 @@ export const FoodCategoryProvider = ({ children }) => {
 
     try {
       const res = await axios.put(
-        `http://localhost:999/food/${id}`,
+        `http://localhost:5000/food/${id}`,
         updatedFood,
         {
           headers: {
@@ -117,7 +117,7 @@ export const FoodCategoryProvider = ({ children }) => {
     const token = localStorage.getItem("Token") || "";
 
     try {
-      await axios.delete(`http://localhost:999/food/${id}`, {
+      await axios.delete(`http://localhost:5000/food/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -130,7 +130,7 @@ export const FoodCategoryProvider = ({ children }) => {
   };
 
   const getFoodByCategory = async (categoryId) => {
-    const res = await axios.get(`http://localhost:999/food/${categoryId}`);
+    const res = await axios.get(`http://localhost:5000/food/${categoryId}`);
     return res.data;
   };
 
@@ -145,6 +145,8 @@ export const FoodCategoryProvider = ({ children }) => {
         foods,
         addCategory,
         addFood,
+        getCategory,
+        getFood,
         getFoodByCategory,
         deleteFood,
         updateFood,

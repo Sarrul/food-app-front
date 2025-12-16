@@ -24,11 +24,14 @@ export default function Login({ className }) {
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       const response = await axios.post(
-        "http://localhost:999/authentication/login",
+        "http://localhost:5000/authentication/login",
         values
       );
-      // router.push("/");
+      console.log(response, "responserespontskdjgk");
+      router.push("/");
+
       localStorage.setItem("Token", response.data.token);
+      localStorage.setItem("userId", response.data.user._id);
 
       console.log("Push to home page success", response);
       toast.success("login succesful");

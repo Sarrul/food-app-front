@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Logo } from "../_icons/Logo";
-import { ChevronRight, MapPin, ShoppingCart, User } from "lucide-react";
+import { ChevronRight, MapPin, User } from "lucide-react";
+import CartOrderSheet from "./CartOrderSheet"; // Import the CartOrderSheet
 
 const Header = () => {
   return (
-    <div className="w-full bg-[#18181B] h-[172px] flex items-center justify-between py-3 px-22">
+    <div className="w-full bg-[#18181B] h-[68px] flex items-center justify-between py-3 px-22 sticky top-0">
       {/* logo */}
       <div className="flex flex-row gap-3">
         <Logo />
@@ -21,6 +22,7 @@ const Header = () => {
 
       {/* Buttons */}
       <div className="gap-3 flex flex-row">
+        {/* Location button */}
         <Button variant="default" className="bg-white rounded-full gap-1">
           <MapPin className="text-[#EF4444]" />
           <p className="text-[#EF4444] font-inter text-[12px] font-normal leading-4">
@@ -31,9 +33,11 @@ const Header = () => {
           </p>
           <ChevronRight className="text-[#71717A]" />
         </Button>
-        <Button variant="default" className="bg-white rounded-full">
-          <ShoppingCart className="text-black" />
-        </Button>
+
+        {/* Cart button - Replace with CartOrderSheet */}
+        <CartOrderSheet />
+
+        {/* User button */}
         <Button variant="default" className="bg-[#EF4444] rounded-full">
           <User />
         </Button>
@@ -41,4 +45,5 @@ const Header = () => {
     </div>
   );
 };
+
 export default Header;
