@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Image from "next/image";
 
 export const AdminOrderRow = ({
   order,
@@ -19,6 +20,8 @@ export const AdminOrderRow = ({
   onStatusChange,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+  const buttonRef = useRef(null);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -28,19 +31,43 @@ export const AdminOrderRow = ({
         return "bg-red-100 text-red-800";
       case "pending":
         return "bg-yellow-100 text-yellow-800";
-      case "preparing":
-        return "bg-blue-100 text-blue-800";
-      case "delivering":
-        return "bg-purple-100 text-purple-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
   };
 
+  // Calculate popup position when opening
+  useEffect(() => {
+    if (showDetails && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setPopupPosition({
+        top: rect.bottom + 8, // 8px below the button
+        left: rect.left,
+      });
+    }
+  }, [showDetails]);
+
+  // Close popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showDetails &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target) &&
+        !event.target.closest(".order-details-popup")
+      ) {
+        setShowDetails(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showDetails]);
+
   return (
-    <div className="border-b border-[#E4E4E7] last:border-0">
+    <>
       {/* Main Row */}
-      <div className="flex items-center gap-4 p-4 hover:bg-gray-50">
+      <div className="flex items-center gap-4 p-4 hover:bg-gray-50 border-b border-[#E4E4E7] last:border-0">
         {/* Checkbox */}
         <Checkbox
           checked={isChecked}
@@ -59,8 +86,9 @@ export const AdminOrderRow = ({
 
         {/* Food Items Count with Expand */}
         <button
+          ref={buttonRef}
           onClick={() => setShowDetails(!showDetails)}
-          className="flex items-center gap-2 w-32 text-[#09090B] font-inter text-[14px] hover:text-[#EF4444]"
+          className="flex items-center gap-2 w-32 text-[#09090B] font-inter text-[14px] hover:text-[#EF4444] relative"
         >
           <span>{order.items.length} items</span>
           {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -97,38 +125,55 @@ export const AdminOrderRow = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="preparing">Preparing</SelectItem>
-            <SelectItem value="delivering">Delivering</SelectItem>
             <SelectItem value="delivered">Delivered</SelectItem>
             <SelectItem value="cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      {/* Expanded Details */}
+      {/* Overlay Popup */}
       {showDetails && (
-        <div className="bg-gray-50 px-4 py-3 ml-20">
-          <p className="text-[#71717A] font-inter text-[12px] font-semibold mb-2">
-            Order Items:
-          </p>
-          <div className="space-y-2">
+        <div
+          className="order-details-popup fixed bg-white w-[263px] border border-[#E4E4E7] rounded-lg shadow-lg p-3 z-50"
+          style={{
+            top: `${popupPosition.top}px`,
+            left: `${popupPosition.left}px`,
+          }}
+        >
+          <div className="space-y-3">
             {order.items.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex justify-between items-center text-[14px]"
-              >
-                <span className="text-[#09090B]">
-                  {item.foodId?.foodName || "Unknown Item"}
-                </span>
-                <span className="text-[#71717A]">x{item.quantity}</span>
-                <span className="text-[#09090B] font-semibold">
-                  {(item.price * item.quantity).toLocaleString()}₮
-                </span>
+              <div key={idx} className="flex items-center gap-3">
+                {/* Food Image */}
+                <div className="w-12 h-12 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
+                  {item.foodId?.image ? (
+                    <Image
+                      src={item.foodId.image}
+                      alt={item.foodId?.foodName || "Food"}
+                      width={48}
+                      height={48}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                      No img
+                    </div>
+                  )}
+                </div>
+
+                {/* Food Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-[#09090B] font-inter text-[14px] font-medium truncate">
+                    {item.foodId?.foodName || "Unknown Item"}
+                  </p>
+                  <p className="text-[#71717A] font-inter text-[12px]">
+                    Quantity: {item.quantity}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };

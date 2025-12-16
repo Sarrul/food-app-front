@@ -47,6 +47,14 @@ export const CartProvider = ({ children }) => {
         }
       );
 
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem("Token");
+        localStorage.removeItem("userId");
+
+        window.dispatchEvent(new Event("auth-expired"));
+        return;
+      }
+
       if (response.ok) {
         const data = await response.json();
         setOrders(data);

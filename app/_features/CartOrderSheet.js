@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ShoppingCart } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../_provider/CartProvider";
 import { CartItem } from "./CartItem";
 import { OrderList } from "./OrderList";
@@ -57,6 +57,17 @@ const CartOrderSheet = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      setShowLoginPrompt(true);
+    };
+
+    window.addEventListener("auth-expired", handleAuthExpired);
+    return () => {
+      window.removeEventListener("auth-expired", handleAuthExpired);
+    };
+  }, []);
 
   return (
     <>

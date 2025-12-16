@@ -26,13 +26,13 @@ export const LoginPromptDialog = ({ open, onOpenChange }) => {
         </DialogHeader>
         <div className="flex flex-col gap-3 mt-4">
           <Button
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("authentication/login")}
             className="w-full bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-full h-12"
           >
             Login
           </Button>
           <Button
-            onClick={() => router.push("/signup")}
+            onClick={() => router.push("authentication/signup")}
             variant="outline"
             className="w-full rounded-full h-12 border-[#E4E4E7]"
           >

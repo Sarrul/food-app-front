@@ -93,14 +93,14 @@ const OrderPage = () => {
         </div>
 
         {/* Table Header */}
-        <div className="flex items-center gap-4 p-4 bg-gray-50 border-b border-[#E4E4E7] text-[#71717A] text-[12px] font-semibold">
-          <div className="w-8"></div>
-          <div className="w-16">No</div>
-          <div className="w-48">User Email</div>
-          <div className="w-32">Items</div>
-          <div className="w-40">Date</div>
-          <div className="w-32">Total</div>
-          <div className="flex-1">Address</div>
+        <div className="flex items-center p-4 bg-gray-50 border-b border-[#E4E4E7] text-[#71717A] text-[12px] font-semibold">
+          <div className="w-9"></div>
+          <div className="w-19">№</div>
+          <div className="w-52">User Email</div>
+          <div className="w-36">Items</div>
+          <div className="w-44">Date</div>
+          <div className="w-36">Total</div>
+          <div className="w-65 line-clamp-2">Address</div>
           <div className="w-40">Status</div>
         </div>
 
@@ -139,8 +139,6 @@ const OrderPage = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="preparing">Preparing</SelectItem>
-                <SelectItem value="delivering">Delivering</SelectItem>
                 <SelectItem value="delivered">Delivered</SelectItem>
                 <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>

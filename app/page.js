@@ -45,7 +45,6 @@ export default function Home() {
 
     localStorage.setItem("orders", JSON.stringify(cart));
 
-    // 🔥 CRITICAL: Dispatch event to update cart
     window.dispatchEvent(new CustomEvent("cartUpdate"));
 
     toast.success(`${food.foodName} added to cart!`);
@@ -59,7 +58,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-[#404040] gap-22">
+    <div className="bg-[#404040] gap-10 flex flex-col items-center">
       <div className="mb-22 w-full">
         <Header />
         <Image
@@ -80,7 +79,7 @@ export default function Home() {
               <p className="text-white font-inter text-[30px] font-semibold leading-9 tracking-[-0.75px]">
                 {item.categoryName}
               </p>
-              <div className="grid gap-9 grid-cols-3">
+              <div className="grid gap-9 grid-cols-3 max-w-[1264px] ">
                 {foods
                   .filter((food) => food.category === item._id)
                   .map((food) => {
