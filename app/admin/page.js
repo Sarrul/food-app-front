@@ -13,9 +13,9 @@ const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("food");
 
   return (
-    <div className="bg-[#F4F4F5] flex flex-row gap-6 justify-center">
+    <div className="bg-[#F4F4F5] flex w-full min-h-screen flex-row gap-6">
       {/* side bar */}
-      <div className="w-[205px] h-[1100px] bg-white sticky top-0  px-5 py-9 flex-col items-start">
+      <div className="w-[205px] h-[1100px] shrink-0 bg-white sticky top-0 px-5 py-9 flex flex-col items-start">
         {/* logo */}
         <div className="flex flex-row gap-3 mb-10">
           <Logo />
@@ -58,9 +58,9 @@ const AdminPage = () => {
         </div>
       </div>
       {/* main */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 min-w-0 pr-6 py-6">
         {activeTab === "food" ? (
-          <div className="flex flex-col gap-6">
+          <div className="flex w-full flex-col items-center gap-6">
             {/* deed taliin menu */}
             <CategoriesList />
             {/* gol food section */}

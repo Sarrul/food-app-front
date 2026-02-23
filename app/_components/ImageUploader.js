@@ -5,8 +5,9 @@ import { X, Image } from "lucide-react";
 const UPLOAD_PRESET = "food-app";
 const CLOUD_NAME = "dzkjbbs03";
 
-const ImageUploader = ({ value, onChange }) => {
+const ImageUploader = ({ value, onChange, onUploadingChange }) => {
   const [preview, setPreview] = useState(value);
+  const [isUploading, setIsUploading] = useState(false);
 
   const uploadToCloudinary = async (file) => {
     const formData = new FormData();
@@ -32,11 +33,18 @@ const ImageUploader = ({ value, onChange }) => {
     const file = e.target.files[0];
     if (!file) return;
     try {
+      setIsUploading(true);
+      onUploadingChange?.(true);
       const url = await uploadToCloudinary(file);
-      setPreview(url);
-      onChange(url);
+      if (url) {
+        setPreview(url);
+        onChange(url);
+      }
     } catch (err) {
       console.error("failed to upload image", err.message);
+    } finally {
+      setIsUploading(false);
+      onUploadingChange?.(false);
     }
   };
 
@@ -74,10 +82,16 @@ const ImageUploader = ({ value, onChange }) => {
           <p>Click to upload image</p>
         </div>
       )}
+      {isUploading && (
+        <div className="absolute inset-0 rounded-md bg-white/80 flex items-center justify-center text-sm font-medium text-[#2563EB]">
+          Uploading image...
+        </div>
+      )}
       <input
         type="file"
         accept="image/*"
         onChange={handleImageUpload}
+        disabled={isUploading}
         className="hidden"
       />
     </label>

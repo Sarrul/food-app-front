@@ -33,6 +33,7 @@ const CartOrderSheet = () => {
   const [showOrderSuccess, setShowOrderSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState("");
+  const isDeliveryAddressMissing = !deliveryAddress.trim();
 
   const handlePlaceOrder = async () => {
     const token = localStorage.getItem("Token");
@@ -42,7 +43,7 @@ const CartOrderSheet = () => {
       return;
     }
 
-    if (!deliveryAddress.trim()) {
+    if (isDeliveryAddressMissing) {
       return; // Let the provider handle the error
     }
 
@@ -156,8 +157,14 @@ const CartOrderSheet = () => {
                         placeholder="Please share your complete address"
                         value={deliveryAddress}
                         onChange={(e) => setDeliveryAddress(e.target.value)}
+                        aria-invalid={isDeliveryAddressMissing}
                         className="flex flex-col w-full items-start flex-1 self-stretch px-3 py-2 rounded-md border border-zinc-200 bg-white shadow-sm min-h-[80px]"
                       />
+                      {isDeliveryAddressMissing && (
+                        <p className="mt-2 text-sm text-[#EF4444]">
+                          Please enter your delivery location to continue.
+                        </p>
+                      )}
                     </div>
                   </>
                 )}
@@ -201,7 +208,7 @@ const CartOrderSheet = () => {
                     <Button
                       onClick={handlePlaceOrder}
                       className="w-full bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-full h-12"
-                      disabled={loading}
+                      disabled={loading || isDeliveryAddressMissing}
                     >
                       {loading ? "Placing Order..." : "Proceed to Checkout"}
                     </Button>

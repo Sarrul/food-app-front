@@ -29,6 +29,8 @@ const AddFoodDialog = ({
     category: "",
   };
   const [close, setClose] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { addFood } = useFoodCategory();
 
   const handleClose = (state) => {
@@ -39,12 +41,16 @@ const AddFoodDialog = ({
   };
 
   const handleSubmitButton = async () => {
-    console.log("hello");
+    if (isUploadingImage || isSubmitting) return;
+
     try {
+      setIsSubmitting(true);
       await addFood(newFood);
       handleClose(false);
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -108,6 +114,7 @@ const AddFoodDialog = ({
           <ImageUploader
             value={newFood.image}
             onChange={(url) => setNewFood({ ...newFood, image: url })}
+            onUploadingChange={setIsUploadingImage}
           />
         </div>
 
@@ -116,10 +123,13 @@ const AddFoodDialog = ({
             variant="default"
             className="w-[93px] h-10"
             onClick={handleSubmitButton}
-            // disabled={loading}
+            disabled={isUploadingImage || isSubmitting}
           >
-            Add a dish
-            {/* {loading ? "Adding..." : "Add a dish"} */}
+            {isUploadingImage
+              ? "Uploading..."
+              : isSubmitting
+              ? "Adding..."
+              : "Add a dish"}
           </Button>
         </div>
       </DialogContent>

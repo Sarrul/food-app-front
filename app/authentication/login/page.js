@@ -28,10 +28,13 @@ export default function Login({ className }) {
         values
       );
       console.log(response, "responserespontskdjgk");
-      router.push("/");
+      const token = response?.data?.token;
+      const loggedInUserId =
+        response?.data?.user?._id || response?.data?.user?.id || "";
 
-      localStorage.setItem("Token", response.data.token);
-      localStorage.setItem("userId", response.data.user._id);
+      localStorage.setItem("Token", token);
+      localStorage.setItem("userId", loggedInUserId);
+      router.push("/");
 
       console.log("Push to home page success", response);
       toast.success("login succesful");

@@ -9,8 +9,8 @@ const CategoriesList = () => {
   const { categories, foods, addCategory } = useFoodCategory();
 
   return (
-    <div className="flex flex-col gap-6 w-full">
-      <div className=" w-full flex  justify-end">
+    <div className="flex flex-col items-center gap-6 w-full">
+      <div className="w-[1171px] flex justify-end">
         <Image src="/Avatar.png" width={36} height={36} alt="Avatar" />
       </div>
       <div className="bg-white rounded-xl p-6 h-44 w-[1171px] gap-4 flex flex-col">

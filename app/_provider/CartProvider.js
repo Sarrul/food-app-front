@@ -121,11 +121,18 @@ export const CartProvider = ({ children }) => {
         throw new Error("Please login to place an order");
       }
 
+      if (!userId) {
+        localStorage.removeItem("Token");
+        window.dispatchEvent(new Event("auth-expired"));
+        throw new Error("Please login again to continue.");
+      }
+
       if (!deliveryInfo.address) {
         throw new Error("Please provide delivery address");
       }
 
       const orderData = {
+        user: userId,
         userId: userId,
         items: cartItems.map((item) => ({
           foodId: item._id,
@@ -144,6 +151,13 @@ export const CartProvider = ({ children }) => {
         },
         body: JSON.stringify(orderData),
       });
+
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem("Token");
+        localStorage.removeItem("userId");
+        window.dispatchEvent(new Event("auth-expired"));
+        throw new Error("Invalid or expired token.");
+      }
 
       if (!response.ok) {
         const errorData = await response.json();

@@ -67,7 +67,7 @@ export const AdminOrderRow = ({
   return (
     <>
       {/* Main Row */}
-      <div className="flex items-center gap-4 p-4 hover:bg-gray-50 border-b border-[#E4E4E7] last:border-0">
+      <div className="grid grid-cols-[36px_72px_220px_140px_150px_120px_minmax(260px,1fr)_160px] items-center gap-4 p-4 hover:bg-gray-50 border-b border-[#E4E4E7] last:border-0">
         {/* Checkbox */}
         <Checkbox
           checked={isChecked}
@@ -88,7 +88,7 @@ export const AdminOrderRow = ({
         <button
           ref={buttonRef}
           onClick={() => setShowDetails(!showDetails)}
-          className="flex items-center gap-2 w-32 text-[#09090B] font-inter text-[14px] hover:text-[#EF4444] relative"
+          className="flex items-center gap-2 w-full text-[#09090B] font-inter text-[14px] hover:text-[#EF4444] relative"
         >
           <span>{order.items.length} items</span>
           {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -109,7 +109,7 @@ export const AdminOrderRow = ({
         </div>
 
         {/* Address */}
-        <div className="flex-1 text-[#71717A] font-inter text-[14px] truncate">
+        <div className="min-w-0 text-[#71717A] font-inter text-[14px] truncate">
           {order.deliveryAddress}
         </div>
 
@@ -119,7 +119,7 @@ export const AdminOrderRow = ({
           onValueChange={(value) => onStatusChange(order._id, value)}
         >
           <SelectTrigger
-            className={`w-40 ${getStatusColor(order.status)} border-none`}
+            className={`w-full ${getStatusColor(order.status)} border-none`}
           >
             <SelectValue />
           </SelectTrigger>

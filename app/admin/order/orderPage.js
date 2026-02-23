@@ -59,13 +59,13 @@ const OrderPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full">
+    <div className="flex flex-col gap-6 w-full min-w-0">
       <div className="w-full flex justify-end">
         <Image src="/Avatar.png" width={36} height={36} alt="Avatar" />
       </div>
 
       {/* Orders Table */}
-      <div className="flex flex-col items-start gap-0 w-full rounded-lg border border-[#E4E4E7] bg-white">
+      <div className="flex flex-col items-start gap-0 w-full rounded-lg border border-[#E4E4E7] bg-white overflow-hidden">
         {/* Header */}
         <div className="flex p-4 justify-between items-center border-b border-[#E4E4E7] w-full">
           <div className="flex flex-col items-start">
@@ -93,34 +93,38 @@ const OrderPage = () => {
         </div>
 
         {/* Table Header */}
-        <div className="flex items-center p-4 bg-gray-50 border-b border-[#E4E4E7] text-[#71717A] text-[12px] font-semibold">
-          <div className="w-9"></div>
-          <div className="w-19">№</div>
-          <div className="w-52">User Email</div>
-          <div className="w-36">Items</div>
-          <div className="w-44">Date</div>
-          <div className="w-36">Total</div>
-          <div className="w-65 line-clamp-2">Address</div>
-          <div className="w-40">Status</div>
-        </div>
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[1200px]">
+            <div className="grid grid-cols-[36px_72px_220px_140px_150px_120px_minmax(260px,1fr)_160px] items-center gap-4 p-4 bg-gray-50 border-b border-[#E4E4E7] text-[#71717A] text-[12px] font-semibold">
+              <div></div>
+              <div>№</div>
+              <div>User Email</div>
+              <div>Items</div>
+              <div>Date</div>
+              <div>Total</div>
+              <div>Address</div>
+              <div>Status</div>
+            </div>
 
-        {/* Orders List */}
-        {loading ? (
-          <div className="p-8 text-center text-[#71717A]">Loading...</div>
-        ) : allOrders.length === 0 ? (
-          <div className="p-8 text-center text-[#71717A]">No orders found</div>
-        ) : (
-          allOrders.map((order, index) => (
-            <AdminOrderRow
-              key={order._id}
-              order={order}
-              index={index}
-              isChecked={selectedOrders.includes(order._id)}
-              onCheck={handleCheck}
-              onStatusChange={updateOrderStatus}
-            />
-          ))
-        )}
+            {/* Orders List */}
+            {loading ? (
+              <div className="p-8 text-center text-[#71717A]">Loading...</div>
+            ) : allOrders.length === 0 ? (
+              <div className="p-8 text-center text-[#71717A]">No orders found</div>
+            ) : (
+              allOrders.map((order, index) => (
+                <AdminOrderRow
+                  key={order._id}
+                  order={order}
+                  index={index}
+                  isChecked={selectedOrders.includes(order._id)}
+                  onCheck={handleCheck}
+                  onStatusChange={updateOrderStatus}
+                />
+              ))
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Bulk Status Change Dialog */}
