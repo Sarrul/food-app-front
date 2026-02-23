@@ -35,7 +35,8 @@ export const FoodCategoryProvider = ({ children }) => {
 
   const addCategory = async (categoryName) => {
     // setLoading(true);
-    const token = localStorage.getItem("token") || "";
+    const token =
+      localStorage.getItem("Token") || localStorage.getItem("token") || "";
 
     try {
       const res = await axios.post(
@@ -56,6 +57,56 @@ export const FoodCategoryProvider = ({ children }) => {
       console.log("Error creating categories:", err);
       // } finally {
       //   setLoading(false);
+    }
+  };
+
+  const updateCategory = async (id, categoryName) => {
+    const token =
+      localStorage.getItem("Token") || localStorage.getItem("token") || "";
+
+    try {
+      const res = await axios.put(
+        "http://localhost:5000/foodcategory",
+        { id, categoryName },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setCategories((prev) =>
+        prev.map((item) => (item._id === id ? res.data : item))
+      );
+      toast.success("Category updated");
+      return true;
+    } catch (err) {
+      console.log("Error updating category:", err.response?.data || err.message);
+      toast.error("Failed to update category");
+      return false;
+    }
+  };
+
+  const deleteCategory = async (id) => {
+    const token =
+      localStorage.getItem("Token") || localStorage.getItem("token") || "";
+
+    try {
+      await axios.delete("http://localhost:5000/foodcategory", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: { id },
+      });
+
+      setCategories((prev) => prev.filter((item) => item._id !== id));
+      setFoods((prev) => prev.filter((food) => food.category !== id));
+      toast.success("Category deleted");
+      return true;
+    } catch (err) {
+      console.log("Error deleting category:", err.response?.data || err.message);
+      toast.error("Failed to delete category");
+      return false;
     }
   };
 
@@ -144,6 +195,8 @@ export const FoodCategoryProvider = ({ children }) => {
         categories,
         foods,
         addCategory,
+        updateCategory,
+        deleteCategory,
         addFood,
         getCategory,
         getFood,

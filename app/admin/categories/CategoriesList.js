@@ -3,10 +3,12 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import AddCategoryDialog from "./AddCategoryDialog";
+import CategoryManageDialog from "./CategoryManageDialog";
 import { useFoodCategory } from "../../_provider/FoodCategoryProvider";
 
 const CategoriesList = () => {
-  const { categories, foods, addCategory } = useFoodCategory();
+  const { categories, foods, addCategory, updateCategory, deleteCategory } =
+    useFoodCategory();
 
   return (
     <div className="flex flex-col items-center gap-6 w-full">
@@ -36,9 +38,12 @@ const CategoriesList = () => {
                 variant="outline"
               >
                 {item.categoryName}
-                <Badge variant="default" className="px-2.5 py-0.5">
-                  {foodCount}
-                </Badge>
+                <CategoryManageDialog
+                  category={item}
+                  foodCount={foodCount}
+                  onUpdate={updateCategory}
+                  onDelete={deleteCategory}
+                />
               </Badge>
             );
           })}
