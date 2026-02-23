@@ -24,8 +24,8 @@ export default function Login({ className }) {
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/authentication/login",
-        values
+        "https://food-app-back-5iqb.onrender.com/authentication/login",
+        values,
       );
       console.log(response, "responserespontskdjgk");
       const token = response?.data?.token;
@@ -133,7 +133,7 @@ export default function Login({ className }) {
 
               <Field>
                 <Button type="submit" disabled={formik.isSubmitting}>
-                  Let's go
+                  Lets go
                 </Button>
               </Field>
 

@@ -12,7 +12,7 @@ export const useFoodCategory = () => {
 
   if (!context) {
     throw new Error(
-      "useFoodCategory must be used inside a <FoodCategoryProvider>"
+      "useFoodCategory must be used inside a <FoodCategoryProvider>",
     );
   }
   return context;
@@ -25,7 +25,9 @@ export const FoodCategoryProvider = ({ children }) => {
   // category
   const getCategory = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/foodcategory");
+      const res = await axios.get(
+        "https://food-app-back-5iqb.onrender.com/foodcategory",
+      );
 
       setCategories(res.data);
     } catch (err) {
@@ -40,7 +42,7 @@ export const FoodCategoryProvider = ({ children }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/foodcategory",
+        "https://food-app-back-5iqb.onrender.com/foodcategory",
         {
           categoryName,
         },
@@ -48,7 +50,7 @@ export const FoodCategoryProvider = ({ children }) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       console.log(res, "response");
@@ -66,22 +68,25 @@ export const FoodCategoryProvider = ({ children }) => {
 
     try {
       const res = await axios.put(
-        "http://localhost:5000/foodcategory",
+        "https://food-app-back-5iqb.onrender.com/foodcategory",
         { id, categoryName },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setCategories((prev) =>
-        prev.map((item) => (item._id === id ? res.data : item))
+        prev.map((item) => (item._id === id ? res.data : item)),
       );
       toast.success("Category updated");
       return true;
     } catch (err) {
-      console.log("Error updating category:", err.response?.data || err.message);
+      console.log(
+        "Error updating category:",
+        err.response?.data || err.message,
+      );
       toast.error("Failed to update category");
       return false;
     }
@@ -92,19 +97,25 @@ export const FoodCategoryProvider = ({ children }) => {
       localStorage.getItem("Token") || localStorage.getItem("token") || "";
 
     try {
-      await axios.delete("http://localhost:5000/foodcategory", {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await axios.delete(
+        "https://food-app-back-5iqb.onrender.com/foodcategory",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: { id },
         },
-        data: { id },
-      });
+      );
 
       setCategories((prev) => prev.filter((item) => item._id !== id));
       setFoods((prev) => prev.filter((food) => food.category !== id));
       toast.success("Category deleted");
       return true;
     } catch (err) {
-      console.log("Error deleting category:", err.response?.data || err.message);
+      console.log(
+        "Error deleting category:",
+        err.response?.data || err.message,
+      );
       toast.error("Failed to delete category");
       return false;
     }
@@ -113,7 +124,9 @@ export const FoodCategoryProvider = ({ children }) => {
   // food
   const getFood = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/food");
+      const res = await axios.get(
+        "https://food-app-back-5iqb.onrender.com/food",
+      );
       console.log("response", res);
       setFoods(res.data);
     } catch (err) {
@@ -128,11 +141,15 @@ export const FoodCategoryProvider = ({ children }) => {
 
     // setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/food", food, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const res = await axios.post(
+        "https://food-app-back-5iqb.onrender.com/food",
+        food,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       toast.success("Successfully created food");
     } catch (err) {
       console.log("Error creating food:", err.response?.data || err.message);
@@ -146,18 +163,18 @@ export const FoodCategoryProvider = ({ children }) => {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/food/${id}`,
+        `https://food-app-back-5iqb.onrender.com/food/${id}`,
         updatedFood,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       console.log("Updated food:", res.data);
 
       setFoods((prev) =>
-        prev.map((item) => (item._id === id ? res.data : item))
+        prev.map((item) => (item._id === id ? res.data : item)),
       );
     } catch (err) {
       console.error("Error updating food:", err);
@@ -168,7 +185,7 @@ export const FoodCategoryProvider = ({ children }) => {
     const token = localStorage.getItem("Token") || "";
 
     try {
-      await axios.delete(`http://localhost:5000/food/${id}`, {
+      await axios.delete(`https://food-app-back-5iqb.onrender.com/food/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -181,7 +198,9 @@ export const FoodCategoryProvider = ({ children }) => {
   };
 
   const getFoodByCategory = async (categoryId) => {
-    const res = await axios.get(`http://localhost:5000/food/${categoryId}`);
+    const res = await axios.get(
+      `https://food-app-back-5iqb.onrender.com/food/${categoryId}`,
+    );
     return res.data;
   };
 

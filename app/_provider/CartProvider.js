@@ -39,12 +39,12 @@ export const CartProvider = ({ children }) => {
       if (!token || !userId) return;
 
       const response = await fetch(
-        `http://localhost:5000/api/orders/user/${userId}`,
+        `https://food-app-back-5iqb.onrender.com/api/orders/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.status === 401 || response.status === 403) {
@@ -87,7 +87,7 @@ export const CartProvider = ({ children }) => {
       .map((item) =>
         item.foodId === foodId
           ? { ...item, quantity: Math.max(0, item.quantity + delta) }
-          : item
+          : item,
       )
       .filter((item) => item.quantity > 0);
 
@@ -143,14 +143,17 @@ export const CartProvider = ({ children }) => {
         deliveryAddress: deliveryInfo.address,
       };
 
-      const response = await fetch("http://localhost:5000/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        "https://food-app-back-5iqb.onrender.com/api/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(orderData),
         },
-        body: JSON.stringify(orderData),
-      });
+      );
 
       if (response.status === 401 || response.status === 403) {
         localStorage.removeItem("Token");
@@ -185,7 +188,7 @@ export const CartProvider = ({ children }) => {
   // Calculate totals
   const subtotal = cartItems.reduce(
     (sum, item) => sum + (item?.price || 0) * (item?.quantity || 0),
-    0
+    0,
   );
   const total = subtotal + SHIPPING_COST;
 

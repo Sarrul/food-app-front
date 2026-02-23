@@ -15,11 +15,14 @@ export const AdminProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("Token");
 
-      const response = await fetch("http://localhost:5000/api/orders", {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        "https://food-app-back-5iqb.onrender.com/api/orders",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -40,7 +43,7 @@ export const AdminProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("Token");
       const response = await fetch(
-        `http://localhost:5000/api/orders/${orderId}`,
+        `https://food-app-back-5iqb.onrender.com/api/orders/${orderId}`,
         {
           method: "PUT",
           headers: {
@@ -48,15 +51,15 @@ export const AdminProvider = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ status: newStatus }),
-        }
+        },
       );
 
       if (response.ok) {
         // Update local state
         setAllOrders((prevOrders) =>
           prevOrders.map((order) =>
-            order._id === orderId ? { ...order, status: newStatus } : order
-          )
+            order._id === orderId ? { ...order, status: newStatus } : order,
+          ),
         );
         toast.success("Order status updated");
         return true;
@@ -77,14 +80,14 @@ export const AdminProvider = ({ children }) => {
       const token = localStorage.getItem("Token");
 
       const updatePromises = orderIds.map((orderId) =>
-        fetch(`http://localhost:5000/api/orders/${orderId}`, {
+        fetch(`https://food-app-back-5iqb.onrender.com/api/orders/${orderId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ status: newStatus }),
-        })
+        }),
       );
 
       await Promise.all(updatePromises);
@@ -92,8 +95,10 @@ export const AdminProvider = ({ children }) => {
       // Update local state
       setAllOrders((prevOrders) =>
         prevOrders.map((order) =>
-          orderIds.includes(order._id) ? { ...order, status: newStatus } : order
-        )
+          orderIds.includes(order._id)
+            ? { ...order, status: newStatus }
+            : order,
+        ),
       );
 
       toast.success(`Updated ${orderIds.length} orders`);
@@ -112,18 +117,18 @@ export const AdminProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("Token");
       const response = await fetch(
-        `http://localhost:5000/api/orders/${orderId}`,
+        `https://food-app-back-5iqb.onrender.com/api/orders/${orderId}`,
         {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.ok) {
         setAllOrders((prevOrders) =>
-          prevOrders.filter((order) => order._id !== orderId)
+          prevOrders.filter((order) => order._id !== orderId),
         );
         toast.success("Order deleted");
         return true;

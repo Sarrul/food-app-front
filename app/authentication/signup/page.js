@@ -30,8 +30,8 @@ const Home = () => {
   const checkEmailExists = async (email) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/authentication/check-email",
-        { email }
+        "https://food-app-back-5iqb.onrender.com/authentication/check-email",
+        { email },
       );
       setApiError("");
       return true;
@@ -46,11 +46,11 @@ const Home = () => {
   const createUser = async (email, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/authentication/signup",
+        "https://food-app-back-5iqb.onrender.com/authentication/signup",
         {
           email: email,
           password: password,
-        }
+        },
       );
       router.push("/authentication/login");
     } catch (err) {
