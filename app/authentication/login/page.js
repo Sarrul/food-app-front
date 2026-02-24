@@ -31,9 +31,14 @@ export default function Login({ className }) {
       const token = response?.data?.token;
       const loggedInUserId =
         response?.data?.user?._id || response?.data?.user?.id || "";
+      const loggedInUserEmail = response?.data?.user?.email || "";
+      const userRole = response?.data?.user?.role || "user";
 
       localStorage.setItem("Token", token);
       localStorage.setItem("userId", loggedInUserId);
+      localStorage.setItem("userEmail", loggedInUserEmail);
+      localStorage.setItem("userRole", userRole);
+      window.dispatchEvent(new Event("auth-changed"));
       router.push("/");
 
       console.log("Push to home page success", response);

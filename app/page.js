@@ -113,25 +113,25 @@ export default function Home() {
                                   strokeWidth={3}
                                 />
                               </DialogTrigger>
-                              <DialogContent className="flex flex-row w-[826px] h-[412px] gap-6">
+                              <DialogContent className="flex w-[calc(100vw-2rem)] max-w-[826px] flex-col gap-4 p-4 sm:gap-6 sm:p-6 md:h-auto md:max-h-[90vh] md:flex-row overflow-y-auto">
                                 <Image
                                   src={food.image}
                                   alt={food.foodName}
                                   width={377}
                                   height={364}
-                                  className="object-cover rounded-xl"
+                                  className="h-52 w-full rounded-xl object-cover sm:h-64 md:h-[364px] md:w-[377px] shrink-0"
                                 />
-                                <div className="flex flex-col justify-between">
+                                <div className="flex min-w-0 flex-1 flex-col justify-between gap-4">
                                   <DialogHeader>
                                     <DialogTitle className="text-[#EF4444] font-inter text-[30px] font-semibold leading-[36px] tracking-[-0.75px]">
                                       {food.foodName}
                                     </DialogTitle>
-                                    <DialogDescription className="text-[#09090B] font-inter text-[16px] font-normal leading-[24px]">
+                                    <DialogDescription className="text-[#09090B] font-inter text-[16px] font-normal leading-[24px] whitespace-normal break-words">
                                       {food.ingredients}
                                     </DialogDescription>
                                   </DialogHeader>
                                   <div className="flex flex-col gap-6">
-                                    <div className="flex flex-row justify-between">
+                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                       <div className="flex flex-col">
                                         <p className="text-[#71717A] font-inter text-[14px]">
                                           Total price
@@ -165,7 +165,7 @@ export default function Home() {
                                     <Button
                                       onClick={() => handleAddToCart(food)}
                                       variant="default"
-                                      className="w-[377px] rounded-full bg-[#EF4444] hover:bg-[#DC2626]"
+                                      className="w-full rounded-full bg-[#EF4444] hover:bg-[#DC2626] md:max-w-[377px]"
                                     >
                                       Add to cart
                                     </Button>

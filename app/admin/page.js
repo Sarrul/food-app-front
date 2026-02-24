@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import CategoriesList from "./categories/CategoriesList";
 import FoodsList from "./foods/FoodsList";
 import { Logo } from "../_icons/Logo";
@@ -9,8 +10,33 @@ import { LayoutDashboard, Truck } from "lucide-react";
 import OrderPage from "./order/orderPage";
 
 const AdminPage = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("food");
+  const [isAllowed, setIsAllowed] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("Token") || localStorage.getItem("token");
+    const role = localStorage.getItem("userRole");
+
+    if (!token || role !== "admin") {
+      router.replace("/");
+      setAuthChecked(true);
+      return;
+    }
+
+    setIsAllowed(true);
+    setAuthChecked(true);
+  }, [router]);
+
+  if (!authChecked) {
+    return null;
+  }
+
+  if (!isAllowed) {
+    return null;
+  }
 
   return (
     <div className="bg-[#F4F4F5] flex w-full min-h-screen flex-row gap-6">

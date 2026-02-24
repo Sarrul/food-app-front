@@ -137,7 +137,13 @@ export const FoodCategoryProvider = ({ children }) => {
   const addFood = async (food) => {
     console.log(food, "foodfoodfoodfood");
     if (!food) return;
-    const token = localStorage.getItem("Token") || "";
+    const token =
+      localStorage.getItem("Token") || localStorage.getItem("token") || "";
+
+    if (!token) {
+      toast.error("Please log in again to add food");
+      throw new Error("Missing auth token");
+    }
 
     // setLoading(true);
     try {
@@ -150,9 +156,17 @@ export const FoodCategoryProvider = ({ children }) => {
           },
         },
       );
+      setFoods((prev) => [...prev, res.data]);
       toast.success("Successfully created food");
+      return res.data;
     } catch (err) {
       console.log("Error creating food:", err.response?.data || err.message);
+      if (err.response?.status === 401) {
+        toast.error("Session expired or unauthorized. Please log in again.");
+      } else {
+        toast.error("Failed to create food");
+      }
+      throw err;
       // } finally {
       // setLoading(false);
     }
